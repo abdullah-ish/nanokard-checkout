@@ -1,0 +1,101 @@
+pipeline {
+    agent any
+    environment {
+        GITHUB_CREDENTIALS = credentials('PAT_GIT') // Replace 'PAT_GIT' with your actual credentials ID
+        REMOTE_HOST = '35.91.119.224'
+        REMOTE_PORT = '22'
+        ECR = "767010169398.dkr.ecr.us-west-2.amazonaws.com"
+        ECR_URI = "767010169398.dkr.ecr.us-west-2.amazonaws.com/nanokard-checkout"
+        IMAGE_TAG = "react-app-staging"
+    }
+    stages {
+        stage('Build') {
+            steps {
+                // Define your build steps here
+                sh 'docker build -t ${ECR_URI}:${IMAGE_TAG} .'
+            }
+        }
+        stage('Push to ECR') {
+            steps {
+                // Login to AWS ECR
+                sh 'aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin ${ECR}'
+        
+                // Push the Docker image to ECR
+                sh "docker push ${ECR_URI}:${IMAGE_TAG}"
+            }
+        }
+        stage('Run Deployment Script') {
+            steps {
+                lock(resource: 'STAGING') {
+                    script {
+                        sshagent(['nanokard-staging-server-key']) {
+                            sh """
+                            ssh -o StrictHostKeyChecking=no -p ${env.REMOTE_PORT} ubuntu@${env.REMOTE_HOST} 'docker stop nginx_container
+
+                            aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin ${env.ECR}
+                            
+                            docker stop react_app_container
+                            docker rm react_app_container
+                            docker rmi ${ECR_URI}:${IMAGE_TAG}
+                            docker network inspect my-network >/dev/null 2>&1 || docker network create my-network
+                            docker run -dit --name react_app_container --env-file /home/ubuntu/react/.env --network my-network ${ECR_URI}:${IMAGE_TAG}
+                            sleep 20
+                            if ! docker ps | grep -q react_app_container; then
+                              echo "---------------------------------------------------------------------------------------------"
+                              echo "---------------------------------------------------------------------------------------------"
+                              echo "react_app_container has exited."
+                              docker logs react_app_container
+                              echo "---------------------------------------------------------------------------------------------"
+                              echo "---------------------------------------------------------------------------------------------"
+                              exit 1
+                            fi
+                            
+                            docker start nginx_container
+                            
+                            if ! docker ps | grep -q nginx_container; then
+                              echo "---------------------------------------------------------------------------------------------"
+                              echo "---------------------------------------------------------------------------------------------"
+                              echo "nginx_container has exited."
+                              docker logs nginx_container
+                              echo "---------------------------------------------------------------------------------------------"
+                              echo "---------------------------------------------------------------------------------------------"
+                              exit 1
+                            fi'
+                            """
+                        }
+                    }
+                }
+            }
+        }
+      }
+
+    post {
+        success {
+            script {
+                def message = """NANOKARD-CHECKOUT-STAGING
+Deployment successful!
+URL: https://checkout-staging.nanokard.com
+Branch: https://github.com/techcreatix/nanokard-checkout/${env.BRANCH_NAME}"""
+                def channel = 'C06DJV4Q6JU'  // Success channel
+                try {
+                    slackSend(channel: channel, message: message)
+                } catch (Exception e) {
+                    echo "Failed to send success notification to Slack: ${e}"
+                }
+            }
+        }
+        failure {
+            script {
+                def message = """NANOKARD-CHECKOUT-STAGING
+Deployment failed!
+Branch: https://github.com/techcreatix/nanokard-checkout/${env.BRANCH_NAME}"""
+                def channel = 'C06CFKL9LBZ'  // Failure channel
+                try {
+                    slackSend(channel: channel, message: message)
+                } catch (Exception e) {
+                    echo "Failed to send failure notification to Slack: ${e}"
+                }
+            }
+        }
+    }
+}

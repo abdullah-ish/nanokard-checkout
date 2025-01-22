@@ -1,0 +1,248 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply font-sans;
+}
+/* Default: Hide scrollbar */
+.custom-scrollbar {
+  overflow: hidden; /* Hide scrollbar */
+}
+
+/* Show scrollbar when .scrollbar-visible class is added */
+.custom-scrollbar.scrollbar-visible {
+  overflow-y: auto; /* Show scrollbar on y-axis */
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  @apply w-0 h-0 sm:w-[8px] sm:h-[8px]
+  /*width: 8px;*/
+  /*height: 8px;*/;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: #555;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+/* hide country dropdown fror number field */
+.react-international-phone-country-selector {
+  display: none;
+}
+/* buttons styling start*/
+.active-blue {
+  @apply text-sm font-semibold text-blue cursor-pointer hover:text-oceanBlue;
+}
+.blue-btn-lg {
+  @apply h-[42px] bg-blue hover:bg-oceanBlue text-white rounded-[360px] font-bold;
+}
+
+.xl-btn {
+  @apply w-[342px] h-[42px] rounded-[360px] font-bold;
+}
+
+.blue-btn-md {
+  @apply w-[131px] h-[36px] bg-blue hover:bg-oceanBlue text-white rounded-[360px] font-bold;
+}
+
+.gray-btn-md-2 {
+  @apply w-[131px] h-[36px] bg-lighterGray  text-spanishGray rounded-[360px] font-bold;
+}
+
+.blue-btn-md-2 {
+  @apply w-[248px] h-[36px] bg-blue hover:bg-oceanBlue text-white rounded-[360px] font-bold;
+}
+
+.blue-btn-sm {
+  @apply w-[95px] h-[36px] bg-blue hover:bg-oceanBlue text-white rounded-[360px] font-bold;
+}
+
+.gray-btn-lg {
+  @apply h-[42px] bg-lighterGray text-spanishGray rounded-[360px] font-bold;
+}
+
+.gray-btn-md {
+  @apply h-[36px] bg-lighterGray text-spanishGray rounded-[360px] font-bold;
+}
+
+.blue-btn-md-3 {
+  @apply h-[36px] bg-blue hover:bg-oceanBlue text-white rounded-[360px] font-bold;
+}
+
+.blue-out-btn-md {
+  @apply w-[159px] h-10 border border-blue text-blue rounded-[10px] font-bold hover:bg-lightBlue focus:bg-lightBlue;
+}
+
+.cancel-btn {
+  @apply text-[14px] text-mediumGray font-semibold leading-[19.07px] hover:underline hover:text-veryDarkGray;
+}
+
+.text-btn-blue {
+  @apply text-[14px] text-blue font-semibold leading-[19.07px] hover:underline hover:text-oceanBlue;
+}
+/* buttons styling End*/
+
+/* Headings styling Start */
+.heading-1 {
+  @apply text-2xl leading-[32.68px] font-semibold text-veryDarkGray;
+}
+.heading-2 {
+  @apply text-xl leading-[27.24px] font-semibold text-veryDarkGray;
+}
+.heading-3-normal {
+  @apply text-base leading-[21.79px] font-semibold text-veryDarkGray;
+}
+.heading-3-bold {
+  @apply text-base leading-[21.79px] font-bold text-veryDarkGray;
+}
+.heading-4-normal {
+  @apply text-sm leading-[19.07px] font-normal text-veryDarkGray;
+}
+.heading-4-bold {
+  @apply text-sm leading-[19.07px] font-semibold text-veryDarkGray;
+}
+
+.paragraph-lg {
+  @apply font-normal text-[14px] leading-[19.07px];
+}
+
+.paragraph-md {
+  @apply font-normal text-[12px] leading-[16.34px];
+}
+
+.red-para {
+  @apply text-[12px] font-semibold leading-[13.62px] text-red;
+}
+
+.red-para-md {
+  @apply text-[14px] font-semibold leading-[19.07px] text-red;
+}
+
+.green-bold-text {
+  @apply text-xl leading-[27.24px] font-semibold text-green;
+}
+
+/* Headings styling End */
+
+/* Paragraph styling Start */
+
+/* Paragraph styling End */
+
+/* Spin animation */
+
+.spinner-gif {
+  width: 50px; /* Adjust width as needed */
+  height: 25px; /* Adjust height as needed */
+}
+/*@media (max-width: 640px) {*/
+/*  .custom-scrollbar::-webkit-scrollbar {*/
+/*    width: 0;*/
+/*    height: 0;*/
+/*  }*/
+/*  .custom-scrollbar {*/
+/*    -ms-overflow-style: none; !* Internet Explorer 10+ *!*/
+/*    scrollbar-width: none; !* Firefox *!*/
+/*  }*/
+/*}*/
+
+.custom-checkbox {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+  outline: none;
+  cursor: pointer;
+  appearance: none;
+  position: relative; /* For positioning the tick mark */
+}
+
+.custom-checkbox:checked {
+  background-color: #039de8;
+}
+
+.custom-checkbox:checked::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 6px; /* Adjust size of the tick mark */
+  height: 11px; /* Adjust size of the tick mark */
+  border: solid #fff; /* Color of the tick mark */
+  border-width: 0 2px 2px 0; /* Create the tick shape */
+  transform: translate(-50%, -50%) rotate(45deg); /* Center and rotate the tick */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  width: 0;
+}
+
+/* Hide scrollbar for IE, Edge, and Firefox */
+.hide-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+/* Example styles for the transition */
+.add-card-container {
+  max-height: 0;
+  transition: max-height 0.5s ease-out, opacity 0.5s ease-out;
+  opacity: 0;
+}
+
+.add-card-container.open {
+  max-height: 720px; /* adjust to fit the content */
+  height: auto;
+  opacity: 1;
+}
+
+/* pay with nanokard button for third party */
+
+.pay-with-nanokard {
+  width: var(--button-width, 633px); /* Default width */
+  height: var(--button-height, 62px); /* Default height */
+  background-color: var(--button-color, #34bcff); /* Default color */
+  gap: 16px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  outline: none;
+  transition: background-color 0.3s ease;
+  padding: 0 16px;
+}
+
+.pay-with-nanokard:hover {
+  background-color: var(
+    --button-hover-color,
+    #2ba8e1
+  ); /* Default hover color */
+}
+
+.pay-with-nanokard img {
+  width: auto;
+  height: 50%;
+}
+
+.pay-with-nanokard .icon-text {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pay-with-nanokard .text {
+  font-family: "Open Sans", sans-serif;
+  font-size: 1.2rem;
+  font-weight: 600;
+  line-height: 1.4;
+  color: white;
+  white-space: nowrap;
+}
